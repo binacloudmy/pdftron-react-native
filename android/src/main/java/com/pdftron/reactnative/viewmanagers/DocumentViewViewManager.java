@@ -558,6 +558,23 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setOverrideToolbarButtonBehavior(items);
     }
 
+    @ReactProp(name = "fontSize")
+    public void setFontSize(DocumentView documentView, int fontSize) {
+        documentView.setFontSize(fontSize);
+    }
+
+
+    @ReactProp(name = "signatureUrl")
+    public void setSignatureUrl(DocumentView documentView, @NonNull String  signatureUrl) {
+        documentView.setSignatureUrl(signatureUrl);
+    }
+
+
+    @ReactProp(name = "rubberStampUrl")
+    public void setRubberStampUrl(DocumentView documentView, @NonNull String  rubberStampUrl) {
+        documentView.setRubberStampUrl(rubberStampUrl);
+    }   
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

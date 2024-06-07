@@ -679,6 +679,28 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(fontSize, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.fontSize = [RCTConvert int:json];
+    }   
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(signatureUrl, NSString, RNTPTDocumentView)
+{
+    if (json && [RCTConvert NSString:json]) {
+        view.signatureUrl = [RCTConvert NSString:json];
+    }
+}
+
+
+RCT_CUSTOM_VIEW_PROPERTY(rubberStampUrl, NSString, RNTPTDocumentView)
+{
+    if (json && [RCTConvert NSString:json]) {
+        view.rubberStampUrl = [RCTConvert NSString:json];
+    }
+}
+
 
 - (UIView *)view
 {

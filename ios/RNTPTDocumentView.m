@@ -110,6 +110,28 @@ NS_ASSUME_NONNULL_END
 
 @implementation RNTPTDocumentView
 
+- (void)setFontSize:(int)fontSize
+{
+    _fontSize = fontSize;
+}
+
+
+- (void)setSignatureUrl:(NSString *)signatureUrl
+{
+    if([signatureUrl length] != 0){
+        _signatureUrl = [signatureUrl copy];
+    }       
+}
+
+
+- (void)setRubberStampUrl:(NSString *)rubberStampUrl
+{
+    if([rubberStampUrl length] != 0){
+        _rubberStampUrl = [rubberStampUrl copy];
+    }       
+}
+
+
 - (void)RNTPTDocumentView_commonInit
 {
     _multiTabEnabled = NO;

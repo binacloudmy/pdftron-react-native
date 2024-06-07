@@ -402,6 +402,10 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *uneditableAnnotationTypes;
 
+//fontSize, signature and stamp
+@property (nonatomic) int fontSize; 
+@property (nonatomic, copy, nullable) NSString *signatureUrl;
+@property (nonatomic, copy, nullable) NSString *rubberStampUrl;
 
 // annotation selection menu customization
 @property (nonatomic, copy, nullable) NSArray<NSString *> *overrideAnnotationMenuBehavior;

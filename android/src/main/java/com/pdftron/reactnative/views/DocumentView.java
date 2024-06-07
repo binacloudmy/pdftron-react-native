@@ -125,6 +125,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private static final String TAG = DocumentView.class.getSimpleName();
 
+    private int mFontSize;
+    private String mSignatureUrl;
+    private String mRubberStampUrl;
+
     private String mDocumentPath;
     private String mTabTitle;
     private boolean mIsBase64;
@@ -5160,4 +5164,39 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 "topChange",
                 event);
     }
+
+    public void setFontSize(int fontSize) {
+        mFontSize = fontSize;
+    }
+
+
+    public void setSignatureUrl(String signatureUrl) {
+        mSignatureUrl = signatureUrl;
+    }
+
+
+    public void setRubberStampUrl(String rubberStampUrl) {
+        mRubberStampUrl = rubberStampUrl;
+    }
+
+    public void setFontSize(int fontSize) {
+        mFontSize = fontSize;
+	updatePresetTextSize(fontSize);
+    }
+
+    public String getStyleId() {
+        return DefaultToolbars.TAG_ANNOTATE_TOOLBAR + String.valueOf(ToolbarButtonType.FREE_TEXT.getValue()) + String.valueOf(DefaultToolbars.ButtonId.FREE_TEXT.value());
+    }
+
+
+    public void updatePresetTextSize(int textSize) {
+       // Get the first preset style
+        AnnotStyle annotStylePreset = ToolStyleConfig.getInstance().getAnnotPresetStyle(getContext(), Annot.e_FreeText, 0, getStyleId());
+        annotStylePreset.setTextSize(textSize);
+	annotStylePreset.setStrokeColor(Color.TRANSPARENT);
+       // Save the preset style
+        PdfViewCtrlSettingsManager.setAnnotStylePreset(getContext(), Annot.e_FreeText, 0, getStyleId(), annotStylePreset.toJSONString());
+    }
+
+
 }

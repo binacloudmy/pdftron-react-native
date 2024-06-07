@@ -12,7 +12,9 @@
     "postinstall": "python3 scripts/newPodspecMessage.py",
     "prestart": "python3 scripts/newPodspecMessage.py",
     "prepublishOnly": "bash scripts/prepare.sh",
-    "postpublish": "bash scripts/postpublish.sh"
+    "postpublish": "bash scripts/postpublish.sh",
+    "pod-install:m1": "cd ios && arch -x86_64 pod install && cd ..",
+    "start:reset": "npx react-native start --reset-cache"
   },
   "repository": {
     "type": "git",
