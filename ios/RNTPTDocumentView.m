@@ -24,7 +24,7 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
+@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate, PTToolManagerDelegate>
 {
     NSMutableDictionary<NSString *, NSNumber *> *_annotationToolbarItemKeyMap;
     NSUInteger _annotationToolbarItemCounter;
@@ -118,10 +118,38 @@ NS_ASSUME_NONNULL_END
 
 - (void)setSignatureUrl:(NSString *)signatureUrl
 {
-    if([signatureUrl length] != 0){
-        _signatureUrl = [signatureUrl copy];
-    }       
+   if([signatureUrl length] != 0){
+       _signatureUrl = [signatureUrl copy];
+
+
+       PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+       NSInteger numberOfSignatures = [signaturesManager numberOfSavedSignatures];
+
+
+       for (NSInteger i = numberOfSignatures - 1; i >= 0; i--) {
+           [signaturesManager deleteSignatureAtIndex:i];
+       }   
+
+
+       NSURL *url = [NSURL URLWithString:_signatureUrl];
+       NSData *imageData = [NSData dataWithContentsOfURL:url];
+       NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+       NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"signature.png"];
+       [imageData writeToFile:filePath atomically:YES];
+       UIImage *image = [UIImage imageWithData:imageData];
+
+
+       NSData *imageDatafromFile = [NSData dataWithContentsOfFile:filePath];
+
+
+       UIImage *fileImage = [UIImage imageWithData:imageDatafromFile];
+       if (fileImage) {
+           [signaturesManager createSignatureWithImage:fileImage data:imageDatafromFile saveSignature:YES];
+       }
+
+   }       
 }
+
 
 
 - (void)setRubberStampUrl:(NSString *)rubberStampUrl
@@ -3530,6 +3558,29 @@ NS_ASSUME_NONNULL_END
 {
     return self.currentDocumentViewController;
 }
+
+- (void)toolManagerToolChanged:(nonnull PTToolManager *)toolManager;
+{
+   //set default font size
+   if ([toolManager.tool isKindOfClass:[PTFreeTextCreate class]]) {
+       PTAnnotationStyleManager *styleManager = [PTAnnotationStyleManager defaultManager];
+      
+       PTAnnotationStylePresetsGroup *presets = [styleManager stylePresetsForAnnotationType:PTExtendedAnnotTypeFreeText
+                                                                             identifier:toolManager.tool.identifier];
+      
+       for (PTAnnotStyle *preset in presets.styles) {
+           if ([preset.availableStyleKeys containsObject:PTAnnotStyleKeyTextSize]) {
+               preset.textSize = _fontSize;
+              
+           }
+       }
+      
+       [presets.selectedStyle setCurrentValuesAsDefaults];
+   }   
+
+
+}
+
 
 - (BOOL)toolManager:(PTToolManager *)toolManager shouldHandleLinkAnnotation:(PTAnnot *)annotation orLinkInfo:(PTLinkInfo *)linkInfo onPageNumber:(unsigned long)pageNumber
 {

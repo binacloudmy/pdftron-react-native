@@ -3138,6 +3138,47 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
 
+               // set default signature 
+       Thread thread = new Thread(new Runnable() {
+           @Override
+           public void run() {
+
+
+               try {
+                   File[] savedSignatures = StampManager.getInstance().getSavedSignatures(getContext());
+                   for (File signature : savedSignatures) {
+                       StampManager.getInstance().deleteSignature(getContext(), signature.getAbsolutePath());
+                   }
+
+
+                   URL url = new URL(mSignatureUrl);
+                   HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                   connection.setDoInput(true);
+                   connection.connect();
+                   InputStream input = connection.getInputStream();
+                   Bitmap bitmap = BitmapFactory.decodeStream(input);
+                   File directory = getContext().getFilesDir();
+                   File file = new File(directory, "signaturefilename.jpg");
+
+
+                   FileOutputStream fOut = new FileOutputStream(file);
+                   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                   fOut.flush();
+                   fOut.close();               
+
+
+                   StampManager.getInstance().setDefaultSignatureFile(file.getAbsolutePath());
+                   Uri imageUri = Uri.fromFile(file);
+                   StampManager.getInstance().createSignatureFromImage(getContext(),imageUri,0);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+           }
+       });
+
+
+       thread.start();
+
         // set react context
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
