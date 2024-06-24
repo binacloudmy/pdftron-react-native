@@ -5206,11 +5206,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 event);
     }
 
-    public void setFontSize(int fontSize) {
-        mFontSize = fontSize;
-    }
-
-
     public void setSignatureUrl(String signatureUrl) {
         mSignatureUrl = signatureUrl;
     }
