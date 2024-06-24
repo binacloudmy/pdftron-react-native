@@ -119,6 +119,20 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+
+import com.pdftron.pdf.config.ToolStyleConfig;
+import com.pdftron.pdf.Annot;
+import com.pdftron.pdf.model.AnnotStyle;
+
+
 import static com.pdftron.reactnative.utils.Constants.*;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
@@ -5205,6 +5219,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 "topChange",
                 event);
     }
+
+    public void setFontSize(int fontSize) {
+        mFontSize = fontSize;
+    }
+
 
     public void setSignatureUrl(String signatureUrl) {
         mSignatureUrl = signatureUrl;
