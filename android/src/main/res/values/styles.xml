@@ -12,4 +12,9 @@
         <item name="showSearchWeb">false</item>
     </style>
 
+    <style name="CustomFreeTextPresetStyle">
+        <item name="annot_color">#000000</item>
+        <item name="annot_font_size">16</item>
+    </style>
+
 </resources>
