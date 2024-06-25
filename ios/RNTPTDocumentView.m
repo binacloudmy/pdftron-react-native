@@ -316,6 +316,16 @@ NS_ASSUME_NONNULL_END
         [self.tabbedDocumentViewController openDocumentWithURL:fileURL
                                                        options:options];
     }
+
+    [self setToolManagerDelegate];
+}
+
+- (void)setToolManagerDelegate {
+    PTDocumentViewController *docController = self.currentDocumentViewController;
+    if (docController) {
+        PTToolManager *toolManager = docController.toolManager;
+        toolManager.delegate = self;
+    }
 }
 
 - (void)setDocument:(NSString *)document
